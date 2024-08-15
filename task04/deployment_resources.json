@@ -23,7 +23,7 @@
     "delay_seconds": 1,
     "maximum_message_size": 1024,
     "message_retention_period": 60,
-    "receive_message_wait_time_seconds": 100,
+    "receive_message_wait_time_seconds": 0,
     "policy": {},
     "redrive_policy": {},
     "content_based_deduplication": false
