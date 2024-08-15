@@ -1,6 +1,5 @@
 exports.handler = async (event) => {
   // TODO implement
-  console.log(JSON.stringify(event));
   if (event.requestContext.http.path == "/hello") {
     return {
       statusCode: 200,
