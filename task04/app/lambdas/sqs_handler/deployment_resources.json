@@ -1,0 +1,18 @@
+{
+  "sqs_handler-role": {
+    "predefined_policies": [
+      "AWSLambdaSQSQueueExecutionRole"
+    ],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "dependencies": [
+      {
+        "resource_name": "async_queue",
+        "resource_type": "sqs_queue"
+      }
+    ]
+  }
+}
