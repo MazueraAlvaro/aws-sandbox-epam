@@ -27,12 +27,12 @@ exports.handler = async (event) => {
 
   const oldItem = record.dynamodb.OldImage;
   const newItem = record.dynamodb.NewImage;
-  const oldValue = parseInt(oldItem.value.N);
   const newValue = parseInt(newItem.value.N);
   const itemKey = newItem.key.S;
 
   let params = {};
   if (record.eventName === "MODIFY") {
+    const oldValue = parseInt(oldItem.value.N);
     params = getParams(itemKey, newValue, oldValue);
   } else {
     params = getParams(itemKey, {
