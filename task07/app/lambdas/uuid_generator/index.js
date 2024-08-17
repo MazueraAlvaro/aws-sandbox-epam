@@ -18,10 +18,10 @@ const getRedableStream = () => {
 exports.handler = async (event) => {
     // TODO implement
     console.log(JSON.stringify(event))
-
+    const time =  new Date(event.time);
     const params = {
         Bucket: process.env.target_bucket,
-        Key: event.time,
+        Key: time.toISOString(),
         Body: getRedableStream()
     };
 
