@@ -4,7 +4,8 @@
     "principal_service": "lambda",
     "custom_policies": [
       "lambda-basic-execution",
-      "PutObjectToDynamoPolicy"
+      "PutObjectToDynamoPolicy",
+      "XRayPolicy"
     ],
     "resource_type": "iam_role"
   }
