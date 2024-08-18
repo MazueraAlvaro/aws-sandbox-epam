@@ -31,8 +31,8 @@ const getParams = ({
       forecast: {
         elevation,
         generationtime_ms,
-        hourly,
-        hourly_units,
+        hourly: {time: hourly.time, temperature_2m: hourly.temperature_2m},
+        hourly_units: {time: hourly_units.time, temperature_2m: hourly_units.temperature_2m},
         latitude,
         longitude,
         timezone,
