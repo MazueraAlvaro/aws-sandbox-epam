@@ -5,7 +5,6 @@ const axios = require("axios");
 const docClient = new AWS.DynamoDB.DocumentClient();
 const tableName = process.env.table_name;
 
-
 const getMeteo = () => {
   return axios
     .get(
@@ -14,16 +13,35 @@ const getMeteo = () => {
     .then((data) => data.data);
 };
 
-const getParams = (forecast) => {
-    return {
-		TableName: tableName,
-		Item: {
-			"id": uuidv4(),
-			forecast
-		}
-	};
-	
-}
+const getParams = ({
+  elevation,
+  generationtime_ms,
+  hourly,
+  hourly_units,
+  latitude,
+  longitude,
+  timezone,
+  timezone_abbreviation,
+  utc_offset_seconds,
+}) => {
+  return {
+    TableName: tableName,
+    Item: {
+      id: uuidv4(),
+      forecast: {
+        elevation,
+        generationtime_ms,
+        hourly,
+        hourly_units,
+        latitude,
+        longitude,
+        timezone,
+        timezone_abbreviation,
+        utc_offset_seconds,
+      },
+    },
+  };
+};
 
 exports.handler = async (event) => {
   // TODO implement
@@ -33,10 +51,10 @@ exports.handler = async (event) => {
   try {
     await docClient.put(params).promise();
     return {
-        statusCode: 201,
-        event: params.Item
+      statusCode: 201,
+      event: params.Item,
     };
-    } catch (err) {
-        return JSON.stringify(err, null, 2);
-    }
+  } catch (err) {
+    return JSON.stringify(err, null, 2);
+  }
 };
