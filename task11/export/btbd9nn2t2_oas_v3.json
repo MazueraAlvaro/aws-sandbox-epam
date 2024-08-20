@@ -793,7 +793,24 @@
         }
       }, 
       "TableByIdResponse": {
-        "type": "#/components/schemas/TableResponse"
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "number": {
+            "type": "integer"
+          },
+          "places": {
+            "type": "string"
+          },
+          "isVip": {
+            "type": "boolean"
+          },
+          "minOrder": {
+            "type": "integer"
+          }
+        }
       }
     },
     "securitySchemes": {
