@@ -49,6 +49,14 @@ const handleReservationCreate = async ({
   slotTimeStart,
   slotTimeEnd,
 }) => {
+  const reservation = {
+    tableNumber,
+    clientName,
+    phoneNumber,
+    date,
+    slotTimeStart,
+    slotTimeEnd,
+  };
   const reservationId = uuidv4();
   const params = {
     TableName: process.env.reservations_table,
@@ -63,6 +71,8 @@ const handleReservationCreate = async ({
     },
   };
   try {
+    await validateReservation(reservation);
+
     await docClient.put(params).promise();
     return {
       statusCode: 200,
@@ -75,6 +85,62 @@ const handleReservationCreate = async ({
       body: JSON.stringify({ message: err.message }),
     };
   }
+};
+
+const validateReservation = async (reservation) => {
+  const table = tableByNumber(reservation.tableNumber);
+  if (!table) throw new Error("Table number doesn exist");
+
+  const reservations = await getReservationByTableNumber(
+    reservation.tableNumber
+  );
+  if (reservations.length == 0) return true;
+
+  const invalid = reservations.some((actualReservation) => {
+    const actualReservationStartDate = new Date(
+      `${actualReservation.date} ${actualReservation.slotTimeStart}`
+    );
+    const actualReservationEndDate = new Date(
+      `${actualReservation.date} ${actualReservation.slotTimeEnd}`
+    );
+    const reservationStartDate = new Date(
+      `${reservation.date} ${reservation.slotTimeStart}`
+    );
+    const reservationEndDate = new Date(
+      `${reservation.date} ${reservation.slotTimeEnd}`
+    );
+
+    if (
+      actualReservationStartDate <= reservationStartDate &&
+      actualReservationEndDate >= reservationStartDate
+    )
+      return true;
+    if (
+      actualReservationStartDate <= reservationEndDate &&
+      actualReservationEndDate >= reservationEndDate
+    )
+      return true;
+    return false;
+  });
+  if (invalid) {
+    throw new Error("Reservation date overlaps existent reservation");
+  } else return true;
+};
+
+const getReservationByTableNumber = async (tableNumber) => {
+  const params = {
+    TableName: process.env.reservations_table,
+    KeyConditionExpression: "#tableNumber = :tableNumber",
+    ExpressionAttributeNames: {
+      "#tableNumber": "tableNumber",
+    },
+    ExpressionAttributeValues: {
+      ":tableNumber": parseInt(tableNumber),
+    },
+  };
+
+  const data = await docClient.query(params).promise();
+  return data.Items;
 };
 
 const handleTableCreate = async ({ id, number, places, isVip, minOrder }) => {
@@ -103,7 +169,7 @@ const handleTableCreate = async ({ id, number, places, isVip, minOrder }) => {
   }
 };
 
-const handleTableList = async (tableId) => {
+const handleTableList = async () => {
   const params = {
     TableName: process.env.tables_table,
   };
@@ -146,7 +212,7 @@ const handleTableById = async (tableId) => {
     const data = await docClient.query(params).promise();
     return {
       statusCode: 200,
-      body: JSON.stringify(data.Items[0] ),
+      body: JSON.stringify(data.Items[0]),
     };
   } catch (error) {
     console.error(error);
@@ -155,6 +221,23 @@ const handleTableById = async (tableId) => {
       body: JSON.stringify({ message: error.message }),
     };
   }
+};
+
+const tableByNumber = async (number) => {
+  const params = {
+    TableName: process.env.tables_table,
+    KeyConditionExpression: "#number = :number",
+    ExpressionAttributeNames: {
+      "#number": "number",
+    },
+    ExpressionAttributeValues: {
+      ":number": parseInt(number),
+    },
+  };
+
+  const data = await docClient.query(params).promise();
+  if (data.Items.length == 0) return null;
+  return data.Items[0];
 };
 
 const handleReservationList = async () => {
