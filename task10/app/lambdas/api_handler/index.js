@@ -128,7 +128,7 @@ const validateReservation = async (reservation) => {
 };
 
 const getReservationByTableNumber = async (tableNumber) => {
-  const reservations = getReservationList();
+  const reservations = await getReservationList();
   return reservations.filter(
     (reservation) => reservation.tableNumber === tableNumber
   );
@@ -224,7 +224,7 @@ const tableByNumber = async (number) => {
 
 const handleReservationList = async () => {
   try {
-    const data = getReservationList();
+    const data = await getReservationList();
     return {
       statusCode: 200,
       body: JSON.stringify({ reservations: data.Items }),
