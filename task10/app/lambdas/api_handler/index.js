@@ -88,8 +88,9 @@ const handleReservationCreate = async ({
 };
 
 const validateReservation = async (reservation) => {
-  const table = tableByNumber(reservation.tableNumber);
-  if (!table) throw new Error("Table number doesn exist");
+  const table = await tableByNumber(reservation.tableNumber);
+  console.log(JSON.stringify({table}))
+  if (!table) throw new Error("Table number doesnt exist");
 
   const reservations = await getReservationByTableNumber(
     reservation.tableNumber
