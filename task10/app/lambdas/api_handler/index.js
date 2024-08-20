@@ -128,19 +128,10 @@ const validateReservation = async (reservation) => {
 };
 
 const getReservationByTableNumber = async (tableNumber) => {
-  const params = {
-    TableName: process.env.reservations_table,
-    KeyConditionExpression: "#tableNumber = :tableNumber",
-    ExpressionAttributeNames: {
-      "#tableNumber": "tableNumber",
-    },
-    ExpressionAttributeValues: {
-      ":tableNumber": parseInt(tableNumber),
-    },
-  };
-
-  const data = await docClient.query(params).promise();
-  return data.Items;
+  const reservations = getReservationList();
+  return reservations.filter(
+    (reservation) => reservation.tableNumber === tableNumber
+  );
 };
 
 const handleTableCreate = async ({ id, number, places, isVip, minOrder }) => {
@@ -170,12 +161,8 @@ const handleTableCreate = async ({ id, number, places, isVip, minOrder }) => {
 };
 
 const handleTableList = async () => {
-  const params = {
-    TableName: process.env.tables_table,
-  };
-
   try {
-    const data = await docClient.scan(params).promise();
+    const data = await getTableList();
     return {
       statusCode: 200,
       body: JSON.stringify({ tables: data.Items }),
@@ -187,6 +174,13 @@ const handleTableList = async () => {
       body: JSON.stringify({ message: error.message }),
     };
   }
+};
+
+const getTableList = async () => {
+  const params = {
+    TableName: process.env.tables_table,
+  };
+  return await docClient.scan(params).promise();
 };
 
 const handleTableById = async (tableId) => {
@@ -224,29 +218,13 @@ const handleTableById = async (tableId) => {
 };
 
 const tableByNumber = async (number) => {
-  const params = {
-    TableName: process.env.tables_table,
-    KeyConditionExpression: "#number = :number",
-    ExpressionAttributeNames: {
-      "#number": "number",
-    },
-    ExpressionAttributeValues: {
-      ":number": parseInt(number),
-    },
-  };
-
-  const data = await docClient.query(params).promise();
-  if (data.Items.length == 0) return null;
-  return data.Items[0];
+  const tables = await getTableList();
+  return tables.find((table) => table.number === number);
 };
 
 const handleReservationList = async () => {
-  const params = {
-    TableName: process.env.reservations_table,
-  };
-
   try {
-    const data = await docClient.scan(params).promise();
+    const data = getReservationList();
     return {
       statusCode: 200,
       body: JSON.stringify({ reservations: data.Items }),
@@ -258,6 +236,14 @@ const handleReservationList = async () => {
       body: JSON.stringify({ message: error.message }),
     };
   }
+};
+
+const getReservationList = async () => {
+  const params = {
+    TableName: process.env.reservations_table,
+  };
+
+  return await docClient.scan(params).promise();
 };
 
 const handleSignUp = async (email, password) => {
