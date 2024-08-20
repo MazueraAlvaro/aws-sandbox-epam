@@ -65,7 +65,7 @@ const handleReservationCreate = async ({
   try {
     await docClient.put(params).promise();
     return {
-      statusCode: 201,
+      statusCode: 200,
       body: JSON.stringify({ reservationId }),
     };
   } catch (err) {
@@ -146,7 +146,7 @@ const handleTableById = async (tableId) => {
     const data = await docClient.query(params).promise();
     return {
       statusCode: 200,
-      body: JSON.stringify({ tables: data.Items[0] }),
+      body: JSON.stringify(data.Items[0] ),
     };
   } catch (error) {
     console.error(error);
