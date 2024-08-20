@@ -91,7 +91,7 @@ const handleTableCreate = async ({ id, number, places, isVip, minOrder }) => {
   try {
     await docClient.put(params).promise();
     return {
-      statusCode: 201,
+      statusCode: 200,
       body: JSON.stringify({ id }),
     };
   } catch (err) {
