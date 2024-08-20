@@ -215,7 +215,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/TableCreateResponse"
                 }
               }
             }
@@ -239,6 +239,18 @@
             }
           },
           "passthroughBehavior": "when_no_match"
+        },
+        "summary": "Create a new table",
+        "description": "This operation creates a new table.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TableCreateRequest"
+              }
+            }
+          }
         }
       },
       "options": {
@@ -305,7 +317,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/SignInResponse"
                 }
               }
             }
@@ -324,6 +336,18 @@
             }
           },
           "passthroughBehavior": "when_no_match"
+        },
+        "summary": "Sign In endpoint",
+        "description": "This operation performs the sign in for a user.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInRequest"
+              }
+            }
+          }
         }
       },
       "options": {
@@ -390,7 +414,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/SignUpResponse"
                 }
               }
             }
@@ -409,6 +433,18 @@
             }
           },
           "passthroughBehavior": "when_no_match"
+        },
+        "summary": "Sign up endpoint",
+        "description": "This operation performs the sign up for a user.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUpRequest"
+              }
+            }
+          }
         }
       },
       "options": {
@@ -485,7 +521,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/TableByIdResponse"
                 }
               }
             }
@@ -714,6 +750,50 @@
       "Empty": {
         "title": "Empty Schema",
         "type": "object"
+      },
+      "TableCreateResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "SignInResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          }
+        }
+      },
+      "SignInRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "SignUpResponse": {
+        "type": "string"
+      },
+      "SignUpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }, 
+      "TableByIdResponse": {
+        "type": "#/components/schemas/TableResponse"
       }
     },
     "securitySchemes": {
