@@ -17,6 +17,8 @@
   "paths": {
     "/reservations": {
       "get": {
+        "summary": "List reservations",
+        "description": "Get list of reservations",
         "responses": {
           "200": {
             "description": "200 response",
@@ -179,6 +181,8 @@
     },
     "/tables": {
       "get": {
+        "summary": "List tables",
+        "description": "Get list of tables.",
         "responses": {
           "200": {
             "description": "200 response",
@@ -562,7 +566,9 @@
             }
           },
           "passthroughBehavior": "when_no_match"
-        }
+        },
+        "summary": "Table by Id",
+        "description": "Get table by provided id"
       },
       "options": {
         "parameters": [
