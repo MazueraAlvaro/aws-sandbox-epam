@@ -129,7 +129,7 @@ const validateReservation = async (reservation) => {
 
 const getReservationByTableNumber = async (tableNumber) => {
   const reservations = await getReservationList();
-  return reservations.filter(
+  return reservations.Items.filter(
     (reservation) => reservation.tableNumber === tableNumber
   );
 };
@@ -219,7 +219,7 @@ const handleTableById = async (tableId) => {
 
 const tableByNumber = async (number) => {
   const tables = await getTableList();
-  return tables.find((table) => table.number === number);
+  return tables.Items.find((table) => table.number === number);
 };
 
 const handleReservationList = async () => {
