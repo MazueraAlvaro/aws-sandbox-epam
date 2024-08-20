@@ -138,7 +138,7 @@ const handleTableById = async (tableId) => {
       "#id": "id",
     },
     ExpressionAttributeValues: {
-      ":idValue": tableId,
+      ":idValue": parseInt(tableId),
     },
   };
 
