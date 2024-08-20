@@ -245,7 +245,7 @@ const handleTableById = async (tableId) => {
       body: JSON.stringify(data.Items[0]),
       headers: {
         "Access-Control-Allow-Headers":
-          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "*",
         "Accept-Version": "*",
